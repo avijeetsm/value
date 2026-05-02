@@ -120,55 +120,40 @@
   .contact-strip__right .btn { flex: 1; justify-content: center; }
 }
 
-/* ── Alfa Laval Principal ── */
+/* ── Alfa Laval Principal (simplified two-up) ── */
 .al-principal {
   background: var(--navy-700);
   border-bottom: 3px solid var(--orange);
   position: relative;
   overflow: hidden;
 }
-/* Subtle diagonal texture */
 .al-principal::before {
   content: '';
   position: absolute; inset: 0;
   background: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 40px,
-    rgba(255,255,255,0.012) 40px,
-    rgba(255,255,255,0.012) 41px
+    -45deg, transparent, transparent 40px,
+    rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px
   );
   pointer-events: none;
 }
-
 .al-principal__inner {
   display: grid;
-  grid-template-columns: 220px 1px 1fr 1px auto;
+  grid-template-columns: 220px 1fr;
   align-items: center;
   gap: 0;
   min-height: 140px;
   position: relative;
 }
-
 .al-principal__logo-wrap {
   padding: 2rem 2.5rem;
   display: flex; align-items: center; justify-content: center;
+  border-right: 1px solid rgba(255,255,255,0.08);
 }
 .al-principal__logo {
   width: 160px; height: auto;
-  filter: brightness(0) invert(1) opacity(0.9);
   display: block;
 }
-
-/* Vertical rule */
-.al-principal__vr {
-  width: 1px; height: 80px; align-self: center;
-  background: rgba(255,255,255,0.1);
-}
-
-.al-principal__content {
-  padding: 2rem 2.5rem;
-}
+.al-principal__content { padding: 2rem 2.5rem; max-width: 720px; }
 .al-principal__badge {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 0.7rem; font-weight: 700;
@@ -188,42 +173,31 @@
   letter-spacing: -0.01em;
 }
 .al-principal__text {
-  color: rgba(255,255,255,0.42);
-  font-size: clamp(0.82rem, 1.3vw, 0.925rem);
+  color: rgba(255,255,255,0.55);
+  font-size: clamp(0.85rem, 1.3vw, 0.95rem);
   line-height: 1.65; margin: 0;
-  max-width: 480px;
+  max-width: 620px;
 }
-
-.al-principal__stats {
-  padding: 2rem 2.5rem;
-  display: flex; flex-direction: column; gap: 1.25rem;
-  flex-shrink: 0;
-}
-.al-principal__stat { display: flex; flex-direction: column; gap: 2px; }
-.al-principal__stat-n {
-  color: #fff;
-  font-size: clamp(1.1rem, 2vw, 1.5rem);
-  font-weight: 400; line-height: 1;
-}
-.al-principal__stat-l {
-  color: rgba(255,255,255,0.35);
-  font-size: 0.72rem; font-weight: 500;
-  text-transform: uppercase; letter-spacing: 0.06em;
-}
-
-@media (max-width: 900px) {
-  .al-principal__inner {
-    grid-template-columns: 1fr;
-  }
-  .al-principal__vr { display: none; }
+@media (max-width: 768px) {
+  .al-principal__inner { grid-template-columns: 1fr; }
   .al-principal__logo-wrap {
-    padding: 1.5rem 1.5rem 0;
+    padding: 1.5rem 1.5rem 1rem;
     justify-content: flex-start;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
   }
   .al-principal__logo { width: 130px; }
-  .al-principal__content { padding: 1.25rem 1.5rem; }
-  .al-principal__stats {
-    flex-direction: row; flex-wrap: wrap;
-    padding: 0 1.5rem 1.5rem; gap: 1.5rem;
-  }
+  .al-principal__content { padding: 1.5rem 1.5rem 1.75rem; }
 }
+
+/* (#2) Footer badges — keep on one line */
+.site-footer__badge {
+  white-space: nowrap;
+}
+
+/* ── Footer — improved contrast ── */
+.site-footer__brand-desc { color: #6890a8 !important; }
+.site-footer__col a { color: #6890a8 !important; }
+.site-footer__col a:hover { color: #b0c9dd !important; }
+.site-footer__bottom span { color: #5a7e95 !important; }
+.site-footer__badge { color: #5a7e95 !important; border-color: #1f3a4a !important; }

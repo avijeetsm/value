@@ -18,17 +18,20 @@ export function initHeatExchangerAnimation(canvasId = 'heat-exchanger-canvas') {
     return [r1+(r2-r1)*s|0, g1+(g2-g1)*s|0, b1+(b2-b1)*s|0];
   }
 
-  // HOT: vivid flame red → duller warm blue-grey (cooled but not cold)
+  // HOT fluid: enters HOT on the LEFT, exits COOL on the RIGHT (monotonic).
+  // Flame red on the left → cool blue-grey on the right (visibly cooled).
   function hotCol(x) {
     const t = (x - plates[0]) / (plates[NP] - plates[0]);
-    const [r,g,b] = lerp(t, 255, 55, 10,  100, 115, 140);
+    const [r,g,b] = lerp(t, 255, 70, 20,   80, 110, 145);
     return {r,g,b};
   }
 
-  // COLD: vivid ice blue right → warm amber left
+  // COLD fluid: enters COLD on the RIGHT, exits WARM on the LEFT (monotonic).
+  // Ice blue on the right → warm orange on the left (visibly heated).
   function coldCol(x) {
     const t = (x - plates[0]) / (plates[NP] - plates[0]);
-    const [r,g,b] = lerp(t, 200, 100, 20,  30, 145, 255);
+    // t=0 (left, exit-warmed) → vivid warm orange; t=1 (right, cold inlet) → ice blue
+    const [r,g,b] = lerp(t, 255, 130, 40,   30, 140, 255);
     return {r,g,b};
   }
 
@@ -38,9 +41,9 @@ export function initHeatExchangerAnimation(canvasId = 'heat-exchanger-canvas') {
     reset() {
       const u = plates[NP] - plates[0];
       this.x   = plates[0] + Math.random() * u;
-      this.spd = 0.5 + Math.random() * 0.75;
+      this.spd = 0.22 + Math.random() * 0.35;
       this.wo  = Math.random() * Math.PI * 2;
-      this.ws  = 0.011 + Math.random() * 0.016;
+      this.ws  = 0.006 + Math.random() * 0.010;
       this.lb  = 0.1  + Math.random() * 0.8;
       this.wa  = 2    + Math.random() * 5;
       this.sz  = 2.8  + Math.random() * 1.8;
@@ -72,14 +75,14 @@ export function initHeatExchangerAnimation(canvasId = 'heat-exchanger-canvas') {
     reset() {
       const u = plates[NP] - plates[0];
       this.x   = plates[0] + Math.random() * u;
-      this.spd = 0.5 + Math.random() * 0.75;
+      this.spd = 0.22 + Math.random() * 0.35;
       this.wo  = Math.random() * Math.PI * 2;
-      this.ws  = 0.011 + Math.random() * 0.016;
+      this.ws  = 0.006 + Math.random() * 0.010;
       this.lb  = 0.1  + Math.random() * 0.8;
       this.wa  = 2    + Math.random() * 5;
       this.sz  = 2.5  + Math.random() * 1.6;
       this.rot = Math.random() * Math.PI;
-      this.rs  = (Math.random()-0.5) * 0.013;
+      this.rs  = (Math.random()-0.5) * 0.007;
       this.al  = 0.8  + Math.random() * 0.2;
     }
     get y() {
@@ -118,7 +121,7 @@ export function initHeatExchangerAnimation(canvasId = 'heat-exchanger-canvas') {
       this.sy   = this.dn ? hotZone()  : coldZone();
       this.ey   = this.dn ? coldZone() : hotZone();
       this.prog = Math.random();
-      this.spd  = 0.003 + Math.random()*0.004;
+      this.spd  = 0.0014 + Math.random()*0.0020;
       this.sz   = 2 + Math.random()*2.0;
       this.wx   = (Math.random()-0.5)*8;
       this.al   = 0;
@@ -156,28 +159,31 @@ export function initHeatExchangerAnimation(canvasId = 'heat-exchanger-canvas') {
   }
 
   // ── BACKGROUND ──────────────────────────────────────
+  // Both channels are MONOTONIC counterflow:
+  //   Top (hot):  red on the LEFT (hot inlet) → cooled grey on the RIGHT (outlet)
+  //   Bottom (cold): warmed amber on the LEFT (outlet) → blue on the RIGHT (cold inlet)
   function drawBg() {
     const mid = H/2;
 
-    // Hot channel: vivid warm red-orange gradient left→right
+    // Hot channel — monotonic: deep red left → cool blue-grey right
     const hg = cx.createLinearGradient(0,0,W,0);
-    hg.addColorStop(0,   '#3d0800');  // deep red at hot entry
-    hg.addColorStop(0.5, '#280608');
-    hg.addColorStop(1,   '#111520');  // dark blue-grey at cooled exit
+    hg.addColorStop(0,   '#3d0a00');  // hot inlet (left)
+    hg.addColorStop(1,   '#0a1828');  // cooled outlet (right) — now cool blue-grey
     cx.fillStyle = hg; cx.fillRect(0,0,W,mid);
 
-    // Cold channel: vivid ice blue right, warm amber left
+    // Cold channel — monotonic: warm amber-red left → deep ice blue right
     const cg = cx.createLinearGradient(0,0,W,0);
-    cg.addColorStop(0,   '#1e0e00');  // warm amber-dark at heated exit
-    cg.addColorStop(0.5, '#0a0e1e');
-    cg.addColorStop(1,   '#001535');  // deep ice blue at cold entry
+    cg.addColorStop(0,   '#3a1604');  // warmed outlet (left) — visibly hot
+    cg.addColorStop(1,   '#001535');  // cold inlet (right)
     cx.fillStyle = cg; cx.fillRect(0,mid,W,mid);
 
-    // Colour wash per column — makes gradient more vivid between plates
+    // Per-column wash — also strictly monotonic in each channel
     for (let i=0; i<NP; i++) {
       const x0=plates[i], x1=plates[i+1], t=i/NP;
-      const [hr,hg2,hb] = lerp(t, 180,30,5,   22,28,55);
-      const [cr,cg2,cb] = lerp(t, 130,50,5,   5,40,150);
+      // Hot: red on left → cool blue-grey on right (monotonic)
+      const [hr,hg2,hb] = lerp(t, 180,35,8,   30,55,90);
+      // Cold: warm orange on left → blue on right (monotonic)
+      const [cr,cg2,cb] = lerp(t, 175,80,15,  5,40,150);
       cx.fillStyle=`rgba(${hr},${hg2},${hb},0.35)`; cx.fillRect(x0,0,x1-x0,mid);
       cx.fillStyle=`rgba(${cr},${cg2},${cb},0.35)`; cx.fillRect(x0,mid,x1-x0,mid);
     }
