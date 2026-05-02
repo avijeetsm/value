@@ -112,14 +112,14 @@ export function initHeatExchangerAnimation(canvasId = 'heat-exchanger-canvas') {
       const validPlates = plates.slice(1, -1);
       const pi = validPlates[Math.floor(Math.random()*validPlates.length)];
       this.px   = pi + (Math.random()-0.5)*5;
-      this.dn   = Math.random() < 0.65;
+      this.dn   = true;
       const hotZone  = () => 10 + Math.random()*(H/2 - 20);
       const coldZone = () => H/2+10 + Math.random()*(H/2 - 20);
       this.sy   = this.dn ? hotZone()  : coldZone();
       this.ey   = this.dn ? coldZone() : hotZone();
       this.prog = Math.random();
       this.spd  = 0.003 + Math.random()*0.004;
-      this.sz   = 1.5   + Math.random()*1.0;
+      this.sz   = 2 + Math.random()*2.0;
       this.wx   = (Math.random()-0.5)*8;
       this.al   = 0;
     }
