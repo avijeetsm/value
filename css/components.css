@@ -106,12 +106,16 @@
   .site-nav__links { display: none; }
   .site-nav__cta   { display: none; }
   .site-nav__hamburger { display: flex; }
+  .site-nav { height: 60px; padding: 0 1.25rem; }
   .site-nav__sub { display: none; }
+  .site-nav__name { font-size: 1rem; }
   .site-footer__main { grid-template-columns: 1fr 1fr; gap: 1.75rem; }
   .site-footer__brand { grid-column: 1 / -1; }
+  .contact-strip { padding: 1.4rem 1.25rem; }
 }
 @media (max-width: 480px) {
-  .site-footer__main { grid-template-columns: 1fr; }
+  .site-footer__main { grid-template-columns: 1fr; padding: 1.75rem 1.25rem; }
+  .site-footer__bottom { padding: 0.65rem 1.25rem; flex-direction: column; align-items: flex-start; gap: 0.4rem; }
   .contact-strip__right { width: 100%; }
   .contact-strip__right .btn { flex: 1; justify-content: center; }
 }

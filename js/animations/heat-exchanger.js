@@ -108,8 +108,10 @@ export function initHeatExchangerAnimation(canvasId = 'heat-exchanger-canvas') {
   class HeatParticle {
     constructor() { this.reset(); }
     reset() {
-      const pi = 1 + Math.floor(Math.random()*(NP-1));
-      this.px   = plates[pi] + (Math.random()-0.5)*5;
+      // Pick any plate position
+      const validPlates = plates.slice(1, -1);
+      const pi = validPlates[Math.floor(Math.random()*validPlates.length)];
+      this.px   = pi + (Math.random()-0.5)*5;
       this.dn   = Math.random() < 0.65;
       const hotZone  = () => 10 + Math.random()*(H/2 - 20);
       const coldZone = () => H/2+10 + Math.random()*(H/2 - 20);
@@ -181,55 +183,106 @@ export function initHeatExchangerAnimation(canvasId = 'heat-exchanger-canvas') {
     }
   }
 
-  // ── PLATES (vertical) — look like actual metal plates ──
-  function drawPlates() {
-    plates.forEach(px => {
-      // Wide metallic sheen — 3 layers
-      // 1. Outer glow — wide, very faint
-      cx.beginPath(); cx.moveTo(px,0); cx.lineTo(px,H);
-      cx.strokeStyle = 'rgba(210,230,255,0.04)';
-      cx.lineWidth = 12; cx.stroke();
+  // ── DIVIDER — thin horizontal line separating the two fluid channels ──
+  function drawDivider() {
+    const mid = H / 2;
 
-      // 2. Body of plate — steel grey, solid
-      cx.beginPath(); cx.moveTo(px,0); cx.lineTo(px,H);
-      cx.strokeStyle = 'rgba(180,200,230,0.55)';
-      cx.lineWidth = 3; cx.stroke();
-
-      // 3. Highlight edge — bright thin line on one side (light source from left)
-      cx.beginPath(); cx.moveTo(px-0.5,0); cx.lineTo(px-0.5,H);
-      cx.strokeStyle = 'rgba(240,248,255,0.7)';
-      cx.lineWidth = 0.8; cx.stroke();
-
-      // 4. Shadow edge — darker on right side
-      cx.beginPath(); cx.moveTo(px+1.5,0); cx.lineTo(px+1.5,H);
-      cx.strokeStyle = 'rgba(0,0,0,0.25)';
-      cx.lineWidth = 1; cx.stroke();
-    });
+    // Subtle gradient line — warm top, cool bottom
+    const grad = cx.createLinearGradient(0, mid - 2, 0, mid + 2);
+    grad.addColorStop(0,   'rgba(255,100,40,0.5)');
+    grad.addColorStop(0.5, 'rgba(200,220,255,0.25)');
+    grad.addColorStop(1,   'rgba(40,140,255,0.5)');
+    cx.fillStyle = grad;
+    cx.fillRect(0, mid - 1.5, W, 3);
   }
 
-  // ── DIVIDER WALL (horizontal) — thick solid separator ──
-  function drawDivider() {
-    const mid = H/2;
-    const WALL = 6; // wall thickness in px
+  // ── PLATES — suspended rectangles, gap at top and bottom ──
+  function drawPlates() {
+    // Plate zone: 78% of height centred, 11% gap each side
+    const GAP      = H * 0.11;
+    const plateTop = GAP;
+    const plateBtm = H - GAP;
+    const plateH   = plateBtm - plateTop;
+    const PW       = 7;  // plate body width
+    const MW       = 3;  // mount width
 
-    // Fill the wall zone
-    cx.fillStyle = '#1a2540';
-    cx.fillRect(0, mid - WALL/2, W, WALL);
+    const textGuard = 0; // plates span full width
 
-    // Top edge highlight — warm (hot side above)
-    cx.beginPath(); cx.moveTo(0, mid-WALL/2); cx.lineTo(W, mid-WALL/2);
-    cx.strokeStyle = 'rgba(255,120,60,0.5)';
-    cx.lineWidth = 1.5; cx.stroke();
+    plates.forEach((px, i) => {
+      if (i === 0 || i === NP) return; // skip outer frame positions
+      if (px < textGuard) return;
 
-    // Bottom edge highlight — cool (cold side below)
-    cx.beginPath(); cx.moveTo(0, mid+WALL/2); cx.lineTo(W, mid+WALL/2);
-    cx.strokeStyle = 'rgba(60,160,255,0.5)';
-    cx.lineWidth = 1.5; cx.stroke();
+      const x = px - PW / 2;
 
-    // Centre line — bright metallic
-    cx.beginPath(); cx.moveTo(0, mid); cx.lineTo(W, mid);
-    cx.strokeStyle = 'rgba(220,235,255,0.8)';
-    cx.lineWidth = 0.8; cx.stroke();
+      // ── Subtle glow behind plate ──
+      const glow = cx.createLinearGradient(x - 8, 0, x + PW + 8, 0);
+      glow.addColorStop(0,   'rgba(200,165,100,0)');
+      glow.addColorStop(0.4, 'rgba(200,165,100,0.06)');
+      glow.addColorStop(0.6, 'rgba(200,165,100,0.06)');
+      glow.addColorStop(1,   'rgba(200,165,100,0)');
+      cx.fillStyle = glow;
+      cx.fillRect(x - 8, plateTop, PW + 16, plateH);
+
+      // ── Plate body — metallic gradient ──
+      const pg = cx.createLinearGradient(x, 0, x + PW, 0);
+      pg.addColorStop(0,    'rgba(70,58,42,0.15)');
+      pg.addColorStop(0.2,  'rgba(140,115,80,0.72)');
+      pg.addColorStop(0.5,  'rgba(175,148,105,0.82)');
+      pg.addColorStop(0.8,  'rgba(140,115,80,0.60)');
+      pg.addColorStop(1,    'rgba(60,50,35,0.12)');
+      cx.fillStyle = pg;
+      cx.fillRect(x, plateTop, PW, plateH);
+
+      // ── Corrugation marks ──
+      cx.strokeStyle = 'rgba(120,95,65,0.28)';
+      cx.lineWidth = 0.5;
+      const steps = 10;
+      for (let c = 1; c < steps; c++) {
+        const cy = plateTop + (plateH / steps) * c;
+        cx.beginPath(); cx.moveTo(x, cy); cx.lineTo(x + PW, cy); cx.stroke();
+      }
+
+      // ── Top cap ──
+      cx.fillStyle = 'rgba(185,158,115,0.88)';
+      cx.fillRect(x, plateTop, PW, 3);
+
+      // ── Bottom cap ──
+      cx.fillStyle = 'rgba(185,158,115,0.88)';
+      cx.fillRect(x, plateBtm - 3, PW, 3);
+
+      // ── Top mount — thin rod from canvas top down to plate top ──
+      cx.fillStyle = 'rgba(120,100,72,0.58)';
+      cx.fillRect(px - MW/2, 0, MW, plateTop);
+      // Cap at very top edge
+      cx.fillStyle = 'rgba(170,142,100,0.78)';
+      cx.fillRect(px - MW/2 - 1, 0, MW + 2, 3);
+      // Cap where mount meets plate top
+      cx.fillStyle = 'rgba(170,142,100,0.78)';
+      cx.fillRect(px - MW/2 - 1, plateTop - 2, MW + 2, 3);
+
+      // ── Bottom foot — identical to top mount, mirrored ──
+      cx.fillStyle = 'rgba(120,100,72,0.58)';
+      cx.fillRect(px - MW/2, plateBtm, MW, H - plateBtm);
+      // Cap where foot meets plate bottom
+      cx.fillStyle = 'rgba(170,142,100,0.78)';
+      cx.fillRect(px - MW/2 - 1, plateBtm - 1, MW + 2, 3);
+      // Cap at very bottom edge
+      cx.fillStyle = 'rgba(170,142,100,0.78)';
+      cx.fillRect(px - MW/2 - 1, H - 3, MW + 2, 3);
+    });
+
+    // ── Right frame bar only — left edge is canvas boundary ──
+    const frameX = [plates[NP]].filter(px => px >= textGuard);
+    frameX.forEach(px => {
+      const fg = cx.createLinearGradient(px, 0, px + 6, 0);
+      fg.addColorStop(0, 'rgba(175,150,115,0.85)');
+      fg.addColorStop(1, 'rgba(175,150,115,0.05)');
+      cx.fillStyle = fg;
+      cx.fillRect(px, plateTop, 6, plateH);
+      cx.fillStyle = 'rgba(170,142,100,0.85)';
+      cx.fillRect(px, plateTop, 6, 3);
+      cx.fillRect(px, plateBtm - 3, 6, 3);
+    });
   }
 
   function init() {
@@ -241,8 +294,8 @@ export function initHeatExchangerAnimation(canvasId = 'heat-exchanger-canvas') {
   function frame() {
     requestAnimationFrame(frame);
     drawBg();
-    drawPlates();
-    drawDivider();
+    drawDivider();  // wall first — behind plates
+    drawPlates();   // plates on top of wall — appear continuous
     xP.forEach(p    => { p.update(); p.draw(); });
     hotP.forEach(p  => { p.update(); p.draw(); });
     coldP.forEach(p => { p.update(); p.draw(); });

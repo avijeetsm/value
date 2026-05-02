@@ -223,6 +223,8 @@
 /* ─────────────────────────────────────────────
    RESPONSIVE
 ───────────────────────────────────────────── */
+
+/* Tablet */
 @media (max-width: 960px) {
   .home-products__grid { grid-template-columns: 1fr; }
   .home-products__card { grid-template-columns: 150px 1fr; }
@@ -232,20 +234,111 @@
   .home-why__left { border-right: none; }
   .home-why__stat { grid-template-columns: 90px 1fr; }
 }
+
+/* Tablet portrait */
 @media (max-width: 768px) {
+  /* What we do: 2 columns on tablet */
   .what-we-do { grid-template-columns: 1fr 1fr; }
   .what-we-do__item:nth-child(2) { border-right: none; }
   .what-we-do__item:nth-child(n+3) { border-top: 1px solid var(--border); }
+
   .home-products__header { flex-direction: column; align-items: flex-start; }
   .home-industries__others { grid-template-columns: 1fr; }
   .home-industries__other { border-right: none; }
 }
+
+/* Mobile */
 @media (max-width: 520px) {
+  /* Hero — fixed height on mobile, content stacked cleanly */
+  .hero {
+    height: clamp(420px, 95vw, 520px);
+  }
+  .hero__content {
+    padding: 1.25rem 1.25rem 1.5rem;
+    align-items: flex-end; /* anchor to bottom so btns are always visible */
+  }
+  .hero__text {
+    max-width: 100%;
+    width: 100%;
+  }
+  .hero__eyebrow {
+    font-size: 0.6rem;
+    padding: 4px 10px;
+    margin-bottom: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100vw - 2.5rem);
+    display: inline-flex;
+  }
+  .hero h1 {
+    font-size: 1.95rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.18;
+  }
+  .hero__p {
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+  }
+  .hero__btns {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.6rem;
+  }
+  .hero__btns .btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 0.85rem;
+    padding: 0.6rem 0.75rem;
+  }
   .hero__since { display: none; }
-  .what-we-do { grid-template-columns: 1fr; }
-  .what-we-do__item { border-right: none; border-top: 1px solid var(--border); }
-  .what-we-do__item:first-child { border-top: none; }
+
+  /* What we do: 2x2 grid on mobile — compact */
+  .what-we-do { grid-template-columns: 1fr 1fr; }
+  .what-we-do__item {
+    border-right: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+    padding: 1.1rem 1.25rem;
+  }
+  .what-we-do__item:nth-child(1) { border-top: none; }
+  .what-we-do__item:nth-child(2) { border-top: none; border-right: none; }
+  .what-we-do__item:nth-child(3) { border-right: none; }
+  .what-we-do__item:nth-child(4) { border-right: none; }
+  .what-we-do__bar { height: 1.5rem; }
+  .what-we-do__title { font-size: 1.05rem; }
+  .what-we-do__desc  { font-size: 0.8rem; }
+
+  /* Products */
+  .home-products { padding: 2rem 1.25rem; }
   .home-products__card { grid-template-columns: 1fr; }
-  .home-products__card-diagram { border-right: none; border-bottom: 1px solid var(--border); }
-  .home-why__stat { grid-template-columns: 1fr; gap: 0.35rem; }
+  .home-products__card-diagram {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem;
+    max-height: 140px;
+  }
+  .home-products__card-diagram svg { max-width: 140px; }
+  .home-products__card-body { padding: 1.25rem; }
+
+  /* Industries */
+  .home-industries { padding: 2rem 1.25rem; }
+  .home-industries__others { grid-template-columns: 1fr; }
+  .home-industries__card--featured { padding: 1.25rem; }
+
+  /* Why */
+  .home-why__left  { padding: 2rem 1.25rem; }
+  .home-why__right { padding: 2rem 1.25rem; }
+  .home-why__stat  { grid-template-columns: 1fr; gap: 0.25rem; padding: 1rem 0; }
+  .home-why__stat-n { font-size: 1.5rem; }
+
+  /* Brands */
+  .brands { padding: 1.1rem 1.25rem; }
+}
+
+/* Small mobile */
+@media (max-width: 380px) {
+  .hero h1 { font-size: 1.75rem; }
+  .hero__eyebrow { font-size: 0.58rem; }
 }
