@@ -1,0 +1,225 @@
+/* ── site-nav ── */
+.site-nav {
+  background: #fff;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(1.25rem, 4vw, 3rem);
+  height: 68px;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.site-nav__brand { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
+.site-nav__logo {
+  width: 34px; height: 34px;
+  background: var(--navy-700); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: var(--orange);
+}
+.site-nav__name { color: var(--text-primary); font-size: 1.1rem; font-weight: 600; display: block; line-height: 1.2; }
+.site-nav__sub  { color: var(--text-tertiary); font-size: 0.68rem; display: block; }
+.site-nav__links { display: flex; gap: 1.75rem; }
+.site-nav__link {
+  color: var(--text-secondary); font-size: 0.95rem; text-decoration: none;
+  padding-bottom: 2px; border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.site-nav__link:hover { color: var(--text-primary); text-decoration: none; }
+.site-nav__link--active { color: var(--text-primary); border-bottom-color: var(--orange); }
+.site-nav__cta { font-size: 0.9rem; padding: 0.6rem 1.4rem; }
+
+/* Hamburger */
+.site-nav__hamburger {
+  display: none; flex-direction: column; justify-content: center; gap: 5px;
+  width: 36px; height: 36px; cursor: pointer;
+  background: transparent; border: none; padding: 4px;
+}
+.site-nav__hamburger span {
+  display: block; width: 22px; height: 1.5px;
+  background: var(--text-secondary); border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.site-nav__drawer {
+  display: none; position: fixed; top: 64px; left: 0; right: 0;
+  background: #fff; border-bottom: 1px solid var(--border);
+  padding: 1rem 1.5rem 1.5rem; z-index: 99;
+  flex-direction: column; gap: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.site-nav__drawer.open { display: flex; }
+.site-nav__drawer-link {
+  color: var(--text-secondary); font-size: 1rem; text-decoration: none;
+  padding: 0.85rem 0; border-bottom: 1px solid var(--border-light); display: block;
+}
+.site-nav__drawer-link--active { color: var(--text-primary); font-weight: 500; }
+.site-nav__drawer .btn { margin-top: 1rem; width: 100%; justify-content: center; }
+
+/* ── site-footer ── */
+.site-footer { background: var(--navy-800); }
+.site-footer__main {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2.5rem; padding: 2.5rem clamp(1.25rem, 4vw, 3rem);
+}
+.site-footer__brand-name { color: #fff; font-size: 1rem; font-weight: 600; margin-bottom: 0.6rem; }
+.site-footer__brand-desc { color: #2a5a72; font-size: 0.875rem; line-height: 1.7; max-width: 260px; }
+.site-footer__col-heading { color: #fff; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.9rem; }
+.site-footer__col a { display: block; color: #4a7a99; font-size: 0.82rem; margin-bottom: 0.65rem; text-decoration: none; }
+.site-footer__col a:hover { color: var(--navy-50); text-decoration: none; }
+.site-footer__bottom {
+  background: var(--navy-900); padding: 0.75rem clamp(1.25rem, 4vw, 3rem);
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+}
+.site-footer__bottom span { color: #1a4055; font-size: 0.78rem; }
+.site-footer__badges { display: flex; gap: 8px; }
+.site-footer__badge { color: #1a4055; font-size: 0.7rem; border: 0.5px solid #0f2535; padding: 3px 8px; border-radius: 3px; }
+
+/* ── contact-strip ── */
+.contact-strip {
+  background: var(--orange); padding: 1.75rem clamp(1.25rem, 4vw, 3rem);
+  display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+}
+.contact-strip__left h3 { color: #fff; font-size: clamp(1rem, 2vw, 1.15rem); font-weight: 500; margin-bottom: 0.25rem; }
+.contact-strip__left p  { color: rgba(255,255,255,0.78); font-size: 0.9rem; margin: 0; }
+.contact-strip__right   { display: flex; gap: 0.75rem; flex-shrink: 0; flex-wrap: wrap; }
+
+/* ── page-header ── */
+.page-header { background: var(--navy-700); padding: clamp(2rem, 5vw, 3.5rem) clamp(1.25rem, 4vw, 3rem); }
+.page-header__sub { max-width: 580px; margin-top: 0.75rem; }
+
+/* ── how-point ── */
+.how-point { background: var(--surface-0); padding: 1.35rem; }
+.how-point__num   { font-size: 0.72rem; font-weight: 700; color: var(--orange); margin-bottom: 0.4rem; }
+.how-point__title { font-size: 1rem; font-weight: 500; margin-bottom: 0.4rem; }
+.how-point__desc  { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.65; margin: 0; }
+
+/* ── al-strip ── */
+.al-strip {
+  background: #edf3f8; padding: 0.85rem clamp(1.25rem, 4vw, 3rem);
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.al-strip__dot  { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); flex-shrink: 0; margin-top: 5px; }
+.al-strip__text { color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6; }
+.al-strip__text strong { color: var(--navy-400); font-weight: 600; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .site-nav__links { display: none; }
+  .site-nav__cta   { display: none; }
+  .site-nav__hamburger { display: flex; }
+  .site-nav__sub { display: none; }
+  .site-footer__main { grid-template-columns: 1fr 1fr; gap: 1.75rem; }
+  .site-footer__brand { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+  .site-footer__main { grid-template-columns: 1fr; }
+  .contact-strip__right { width: 100%; }
+  .contact-strip__right .btn { flex: 1; justify-content: center; }
+}
+
+/* ── Alfa Laval Principal ── */
+.al-principal {
+  background: var(--navy-700);
+  border-bottom: 3px solid var(--orange);
+  position: relative;
+  overflow: hidden;
+}
+/* Subtle diagonal texture */
+.al-principal::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 40px,
+    rgba(255,255,255,0.012) 40px,
+    rgba(255,255,255,0.012) 41px
+  );
+  pointer-events: none;
+}
+
+.al-principal__inner {
+  display: grid;
+  grid-template-columns: 220px 1px 1fr 1px auto;
+  align-items: center;
+  gap: 0;
+  min-height: 140px;
+  position: relative;
+}
+
+.al-principal__logo-wrap {
+  padding: 2rem 2.5rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.al-principal__logo {
+  width: 160px; height: auto;
+  filter: brightness(0) invert(1) opacity(0.9);
+  display: block;
+}
+
+/* Vertical rule */
+.al-principal__vr {
+  width: 1px; height: 80px; align-self: center;
+  background: rgba(255,255,255,0.1);
+}
+
+.al-principal__content {
+  padding: 2rem 2.5rem;
+}
+.al-principal__badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.7rem; font-weight: 700;
+  color: var(--orange); letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: 0.75rem;
+}
+.al-principal__badge::before {
+  content: '';
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--orange); flex-shrink: 0;
+}
+.al-principal__heading {
+  color: #fff;
+  font-size: clamp(1.1rem, 2.2vw, 1.55rem);
+  font-weight: 400; line-height: 1.3;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+.al-principal__text {
+  color: rgba(255,255,255,0.42);
+  font-size: clamp(0.82rem, 1.3vw, 0.925rem);
+  line-height: 1.65; margin: 0;
+  max-width: 480px;
+}
+
+.al-principal__stats {
+  padding: 2rem 2.5rem;
+  display: flex; flex-direction: column; gap: 1.25rem;
+  flex-shrink: 0;
+}
+.al-principal__stat { display: flex; flex-direction: column; gap: 2px; }
+.al-principal__stat-n {
+  color: #fff;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 400; line-height: 1;
+}
+.al-principal__stat-l {
+  color: rgba(255,255,255,0.35);
+  font-size: 0.72rem; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+
+@media (max-width: 900px) {
+  .al-principal__inner {
+    grid-template-columns: 1fr;
+  }
+  .al-principal__vr { display: none; }
+  .al-principal__logo-wrap {
+    padding: 1.5rem 1.5rem 0;
+    justify-content: flex-start;
+  }
+  .al-principal__logo { width: 130px; }
+  .al-principal__content { padding: 1.25rem 1.5rem; }
+  .al-principal__stats {
+    flex-direction: row; flex-wrap: wrap;
+    padding: 0 1.5rem 1.5rem; gap: 1.5rem;
+  }
+}
